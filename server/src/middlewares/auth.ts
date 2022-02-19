@@ -16,13 +16,15 @@ export const auth = (
       token = token[0];
     }
 
-    if (!token) {
+    const tokenToVerify = token?.split("Bearer ")[1];
+
+    if (!tokenToVerify) {
       return res.status(403).json({
         message: "A token is required for authentication",
       });
     }
     try {
-      const decoded = jwt.verify(token, config.TOKEN_KEY ?? "");
+      const decoded = jwt.verify(tokenToVerify, config.TOKEN_KEY ?? "");
       req.user = decoded;
       console.log(req.user);
     } catch (err) {
